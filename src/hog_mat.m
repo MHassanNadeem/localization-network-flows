@@ -1,21 +1,26 @@
 clc; close all;
 
-Qn = 0:70;
+Q_range = 1:60; % indices of filenames of query
+D_range = 1:60; % indices of filenames of database
+Q_path = '..\sample_data\set1\query\'; % basepath of query images
+D_path = '..\sample_data\set1\database\'; % basepath of database images
 
-Q = numel(Qn);
-D = 161;
+Q = numel(Q_range); % Total number of images in Query
+D = numel(D_range); % Total number of images in Database
 
-hog_cellsize = [64 64];
+hog_cellsize = [128 128];
 
-%% Read Images and Calculate Hog descriptor
+%% Read Images and Calculate Hog descriptors
 if ~exist('hog_D','var') || numel(hog_D)~=D
    disp('Reading Database Image Set');
    img_D = cell(1,D);
    hog_D = cell(1,D);
-   for i=1:D
-       path = sprintf('set1\\%d.jpg',i);
+   i = 1;
+   for file_index=D_range
+       path = sprintf('%s%d.jpg',D_path,file_index);
        img_D{i} = imread(path);
        hog_D{i} = extractHOGFeatures(img_D{i}, 'CellSize',hog_cellsize);
+       i = i + 1;
    end
 end
 
@@ -23,10 +28,12 @@ if ~exist('hog_Q','var') || numel(hog_Q)~=Q
    disp('Reading Query Image Set');
    img_Q = cell(1,Q);
    hog_Q = cell(1,Q);
-   for i=1:Q
-       path = sprintf('set2\\%d.jpg',i);
+   i = 1;
+   for file_index=Q_range
+       path = sprintf('%s%d.jpg',Q_path,file_index);
        img_Q{i} = imread(path);
        hog_Q{i} = extractHOGFeatures(img_Q{i}, 'CellSize',hog_cellsize);
+       i = i + 1;
    end
 end
 
@@ -60,7 +67,7 @@ disp('Finding Best Matching Images');
 [maxvals, maxindices] = sort(sMat, 2, 'descend'); % Sort rows
 maxindices = maxindices(:,1); % Select index of the Max of each row
 
-plot(maxindices,[1:numel(maxindices)], 'w', 'LineWidth',2);
+plot(maxindices,[1:numel(maxindices)], 'w', 'LineWidth',3);
 
 %% Plot Shortest Path
 path = net_flow(sMat, 1);
@@ -72,6 +79,6 @@ for i=2:numel(path)-1
 end
 
 figure(heat_fig);
-plot(xm,ym, '-.k', 'LineWidth',2);
+plot(xm,ym, '-.k', 'LineWidth',3);
 
 legend('Best Match','Shortest Path');

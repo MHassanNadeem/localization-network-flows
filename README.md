@@ -14,5 +14,5 @@ This implimentation is without the hidden nodes.
 ###Results
 ####Data Set 1
 Note: The diagonal `x=y` is the ground truth.
-![Heatmap showing similarity with shortest path overlayed](heatmap.png)
-![Network with shortest path highlighted](network.png)
+![Set 1 Heatmap showing similarity with shortest path overlayed](results/set1/heatmap.png)
+![Set 1 Network with shortest path highlighted](results/set1/network.png)
